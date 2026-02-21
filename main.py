@@ -59,7 +59,7 @@ def read_root():
                     <li>🔍 Search or list businesses with GET /businesses</li>
                 </ul>
                 <p>Powered by <strong>FastAPI</strong> and <strong>SQLite</strong>!</p>
-                <p>Developed by <strong>Asmaul Husna Rinvi</strong> and <strong>Jahidul Hasan Hemal</strong>!</p>
+                <!--<p>Developed for <strong>Asmaul Husna Rinvi</strong> and <strong>Jahidul Hasan Hemal</strong>!</p>-->
             </div>
         </body>
     </html>
