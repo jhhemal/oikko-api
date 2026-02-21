@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
 from database import SessionLocal, engine
@@ -23,7 +24,7 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
     # return {
     #     "welcome": "Oikko - Local Desi Business Directory",
