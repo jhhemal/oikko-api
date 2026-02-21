@@ -25,16 +25,43 @@ def get_db():
 
 @app.get("/")
 def read_root():
-    return {
-        "welcome": "Oikko - Local Desi Business Directory",
-        "instructions": [
-            "Use /businesses to add new businesses",
-            "Use /businesses/{id} to view, update, or delete",
-            "Visit /docs for interactive API testing"
-        ],
-        "note": "Powered by FastAPI and SQLite! ",
-        "Developed by" : "Asmaul Husna Rinvi & Jahidul Hasan Hemal"
-    }
+    # return {
+    #     "welcome": "Oikko - Local Desi Business Directory",
+    #     "instructions": [
+    #         "Use /businesses to add new businesses",
+    #         "Use /businesses/{id} to view, update, or delete",
+    #         "Visit /docs for interactive API testing"
+    #     ],
+    #     "note": "Powered by FastAPI and SQLite! ",
+    #     "Developed by" : "Asmaul Husna Rinvi & Jahidul Hasan Hemal"
+    # }
+    return """
+    <html>
+        <head>
+            <title>Oikko - Desi Business Directory</title>
+            <style>
+                body { font-family: Arial, sans-serif; background: #f9f9f9; color: #333; padding: 2rem; }
+                h1 { color: #ff6f61; }
+                a { color: #0077cc; text-decoration: none; }
+                a:hover { text-decoration: underline; }
+                .container { max-width: 700px; margin: auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Welcome to Oikko!</h1>
+                <p>Your local desi business directory API is live.</p>
+                <p>Here’s what you can do:</p>
+                <ul>
+                    <li>📖 <a href="/docs">Explore the API docs (Swagger UI)</a></li>
+                    <li>➕ Add new businesses via POST /businesses</li>
+                    <li>🔍 Search or list businesses with GET /businesses</li>
+                </ul>
+                <p>Powered by <strong>FastAPI</strong> and <strong>SQLite</strong>!</p>
+            </div>
+        </body>
+    </html>
+    """
 
 @app.post("/businesses", response_model=BusinessResponse)
 def create_business(business: BusinessCreate, db: Session = Depends(get_db)):
