@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy New Year Rinvi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(circle at 20% 30%, #5f2cff55, transparent 40%),
+      radial-gradient(circle at 80% 20%, #00e5ff55, transparent 35%),
+      radial-gradient(circle at 50% 80%, #ff4ecd55, transparent 40%),
+      linear-gradient(180deg, #050816, #02020a);
+    color: #ffffff;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    animation: fadeUp 1.5s ease;
+  }
+
+  .box {
+    max-width: 520px;
+    padding: 40px 32px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(90,200,255,0.15);
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #7df9ff, #c77dff, #ff77cd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    font-size: 17px;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 18px;
+  }
+
+  .year {
+    margin-top: 26px;
+    font-size: 14px;
+    opacity: 0.7;
+    letter-spacing: 0.15em;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="content">
+  <div class="box">
+    <h1>Happy New Year, Rinvi</h1>
+
+    <p>
+      A new year, a fresh start — and a quiet wish just for you.
+    </p>
+
+    <p>
+      May 2026 be filled with calm moments, bright surprises,
+      and days that feel right in your own way.
+    </p>
+
+    <p>
+      Whatever comes next, I hope it brings you peace.
+    </p>
+
+    <div class="year">2026</div>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("fireworks");
+  const ctx = canvas.getContext("2d");
+  let w, h;
+  let fireworks = [];
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  class Firework {
+    constructor() {
+      this.x = Math.random() * w;
+      this.y = h;
+      this.targetY = Math.random() * h * 0.5;
+      this.speed = 6 + Math.random() * 3;
+      this.exploded = false;
+      this.particles = [];
+      this.hue = Math.random() * 360;
+    }
+
+    update() {
+      if (!this.exploded) {
+        this.y -= this.speed;
+        if (this.y <= this.targetY) this.explode();
+      } else {
+        this.particles.forEach(p => p.update());
+      }
+    }
+
+    draw() {
+      if (!this.exploded) {
+        ctx.fillStyle = `hsl(${this.hue},100%,60%)`;
+        ctx.fillRect(this.x, this.y, 2, 2);
+      } else {
+        this.particles.forEach(p => p.draw());
+      }
+    }
+
+    explode() {
+      this.exploded = true;
+      for (let i = 0; i < 50; i++) {
+        this.particles.push(new Particle(this.x, this.y, this.hue));
+      }
+    }
+  }
+
+  class Particle {
+    constructor(x, y, hue) {
+      this.x = x;
+      this.y = y;
+      this.hue = hue + Math.random() * 40 - 20;
+      this.speed = Math.random() * 4 + 1;
+      this.angle = Math.random() * Math.PI * 2;
+      this.life = 70;
+    }
+
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+      this.life--;
+    }
+
+    draw() {
+      if (this.life <= 0) return;
+      ctx.fillStyle = `hsla(${this.hue},100%,60%,${this.life/70})`;
+      ctx.fillRect(this.x, this.y, 2, 2);
+    }
+  }
+
+  function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, w, h);
+
+    if (Math.random() < 0.06) fireworks.push(new Firework());
+
+    fireworks.forEach((f, i) => {
+      f.update();
+      f.draw();
+      if (f.exploded && f.particles.every(p => p.life <= 0)) {
+        fireworks.splice(i, 1);
+      }
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"81f3e39d67254538827512cfe47b5172","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
