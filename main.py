@@ -23,6 +23,19 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+def read_root():
+    return {
+        "welcome": "Oikko - Local Desi Business Directory",
+        "instructions": [
+            "Use /businesses to add new businesses",
+            "Use /businesses/{id} to view, update, or delete",
+            "Visit /docs for interactive API testing"
+        ],
+        "note": "Powered by FastAPI and SQLite! ",
+        "Developed by" : "Asmaul Husna Rinvi & Jahidul Hasan Hemal"
+    }
+
 @app.post("/businesses", response_model=BusinessResponse)
 def create_business(business: BusinessCreate, db: Session = Depends(get_db)):
     db_business = models.Business(**business.dict())
